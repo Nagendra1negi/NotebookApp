@@ -10,6 +10,18 @@ namespace NotebookApp
     {
         static void Main(string[] args)
         {
+            Welcome();
+            ConsoleControler cc = new ConsoleControler();
+            cc.ReadCommand();
+
+
         }
+
+        public static void Welcome()
+        {
+            Console.WriteLine("Welcome to Notebook App (Created by Ricardo Costa, based on Thomas Brown work)");
+        }
+
+        
     }
 }

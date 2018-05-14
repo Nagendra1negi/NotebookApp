@@ -42,8 +42,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands.cs" />
+    <Compile Include="IControler.cs" />
+    <Compile Include="Image.cs" />
+    <Compile Include="IModel.cs" />
+    <Compile Include="IPageable.cs" />
+    <Compile Include="List.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="ConsoleControler.cs" />
+    <Compile Include="TempModel.cs" />
+    <Compile Include="Menus.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StaticData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
