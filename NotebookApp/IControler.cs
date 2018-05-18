@@ -10,5 +10,6 @@ namespace NotebookApp
     {
         void ReadCommand();
         void UpdateView();
+        void ActionManager(Menu m, Command c);
     }
 }

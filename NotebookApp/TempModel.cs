@@ -8,31 +8,31 @@ namespace NotebookApp
 {
     class TempModel : IModel
     {
-        List<object> objs = new List<object>();
+        List<IPageable> pages = new List<IPageable>();
 
-        public void Create(object obj)
+        public void Create(IPageable page)
         {
-            objs.Add(obj);
+            throw new NotImplementedException();
         }
 
         public void Delete(int id)
         {
-            objs.RemoveAt(id);
+            pages.RemoveAt(id);
         }
 
-        public void Delete(object obj)
+        public void Delete(IPageable page)
         {
-            objs.Remove(obj);
+            pages.Remove(page);
         }
 
         public void DeleteAll()
         {
-            objs.Clear();
+            pages.Clear();
         }
 
-        public object Read(int id)
+        public IPageable Read(int id)
         {
-            return objs[id];
+            return pages[id];
         }
     }
 }

@@ -57,9 +57,27 @@ namespace NotebookApp
                     switch (c)
                     {
                         case Command.Message:
-                            IModel 
+                            Create(new Message());
+                            break;
+                        default:
+                            Console.WriteLine("Invalid Operation!");
+                            ReadCommand();
+                            break;
                     }
+                    break;
+                default:
+                    Console.WriteLine("Invalid Operation!");
+                    ReadCommand();
+                    break;
             }
+        }
+
+        /* action to select wich IModel to use and create the data according to that selection*/
+        private void Create(IPageable page)
+        {
+            /*decide wich IModel */
+            page.Input();
+
         }
     }
 }

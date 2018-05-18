@@ -8,11 +8,11 @@ namespace NotebookApp
 {
     public interface IModel
     {
-        void Create(object obj);
+        void Create(IPageable page);
         void Delete(int id);
-        void Delete(object obj);
+        void Delete(IPageable page);
         void DeleteAll();
-        object Read(int id);
+        IPageable Read(int id);
         
     }
 }
