@@ -13,6 +13,7 @@ namespace NotebookApp
         private string _message;
 
         public PageData Page { get => _pd; set => _pd = value; }
+        public string GetMessage { get => _message; }
 
         public void Input(IPageable p)
         {

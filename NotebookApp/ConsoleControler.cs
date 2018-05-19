@@ -94,13 +94,9 @@ namespace NotebookApp
         /*select in wich mode should we save the data */
         private void Create(IPageable page, IModel model)
         {
-            /* user choosed temp mode */
-            if (model is TempModel tmodel)
-            {
-                model.Create(page);
-                Console.WriteLine("Page successfuly created!");
-                ShowPages(model);
-            }
+            model.Create(page);
+            Console.WriteLine("Page successfuly created!");
+            ShowPages(model);
         }
 
         public void ShowPages(IModel model)
@@ -112,6 +108,24 @@ namespace NotebookApp
                 {
                     Console.WriteLine($"Pages:\nId:{page.Page.id}, {page.Page.title} done by {page.Page.author}.");
                 }
+            }
+        }
+
+        public IModel GetMode()
+        {
+            Console.WriteLine("Which Mode do you want?");
+            Console.WriteLine(StaticData.Show(typeof(Mode)));
+            Mode cMode = StaticData.ReadMode(Console.ReadLine());
+            switch (cMode)
+            {
+                case Mode.Database:
+                    return new DBModel();
+                case Mode.File:
+                    return new FileModel();
+                case Mode.Temp:
+                    return new TempModel();
+                default:
+                    return null;
             }
         }
     }
