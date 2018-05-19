@@ -10,21 +10,7 @@ namespace NotebookApp
     {
         public void ShowMenu()
         {
-            StringBuilder inlineMenu = new StringBuilder();
-            //the invalid option is just for control purpose not for the user
-            string[] menuOptions = Enum.GetNames(typeof(Menu)).Where(opt => opt != "Invalid").ToArray();
-            for (int i = 0; i < menuOptions.Length; i++)
-            {
-                if (i != 0)
-                {
-                    //puts 'or' before the last menu option
-                    string separator = (i == menuOptions.Length - 1 ? " or " : ", ");
-                    inlineMenu.Append(separator);
-                }
-                inlineMenu.Append(menuOptions[i]);
-
-            }
-            Console.WriteLine("Please enter {0}", inlineMenu);
+            Console.WriteLine(StaticData.Show(typeof(Menu)));
         }
 
         public Menu ReadOption(string sChoose)

@@ -14,10 +14,10 @@ namespace NotebookApp
             ConsoleControler cc = new ConsoleControler();
             /*depended on the save mode choosen by the user*/
             IModel dataModel = null;
-            if (true)
+            do
             {
-                dataModel = new TempModel();
-            }
+                dataModel = cc.GetMode();
+            } while (dataModel == null);
             cc.ReadCommand(dataModel);
 
 
