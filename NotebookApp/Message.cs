@@ -6,21 +6,27 @@ using System.Threading.Tasks;
 
 namespace NotebookApp
 {
-    public struct MessageData
-    {
-        string message;
-    }
 
     class Message : IPageable
     {
-        public IPageable Input()
+        private PageData _pd;
+        private string _message;
+
+        public PageData Page { get => _pd; set => _pd = value; }
+
+        public void Input(IPageable p)
         {
             throw new NotImplementedException();
         }
 
-        public void Output()
+        public IPageable Output(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public void InputMessage(string m)
+        {
+            _message = m;
         }
     }
 }

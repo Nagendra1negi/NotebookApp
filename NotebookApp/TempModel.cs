@@ -12,7 +12,10 @@ namespace NotebookApp
 
         public void Create(IPageable page)
         {
-            throw new NotImplementedException();
+            PageData pd = page.Page;
+            pd.id = this.NextId();
+            page.Page = pd;
+            this.pages.Add(page);
         }
 
         public void Delete(int id)
@@ -33,6 +36,22 @@ namespace NotebookApp
         public IPageable Read(int id)
         {
             return pages[id];
+        }
+
+        public List<IPageable> ReadAll()
+        {
+            return this.pages;
+        }
+
+        private int NextId()
+        {
+            if(pages.Any()) {
+                return pages.Max(t => t.Page.id) + 1;
+            }
+            else
+            {
+                return 1;
+            }
         }
     }
 }

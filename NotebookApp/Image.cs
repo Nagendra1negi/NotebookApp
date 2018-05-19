@@ -14,12 +14,14 @@ namespace NotebookApp
 
     class Image : IPageable
     {
-        public IPageable Input()
+        public PageData Page { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public void Input(IPageable p)
         {
             throw new NotImplementedException();
         }
 
-        public void Output()
+        public IPageable Output(int id)
         {
             throw new NotImplementedException();
         }

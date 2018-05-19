@@ -13,6 +13,7 @@ namespace NotebookApp
         void Delete(IPageable page);
         void DeleteAll();
         IPageable Read(int id);
+        List<IPageable> ReadAll();
         
     }
 }

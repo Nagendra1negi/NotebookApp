@@ -8,8 +8,8 @@ namespace NotebookApp
 {
     interface IControler
     {
-        void ReadCommand();
+        void ReadCommand(IModel m);
         void UpdateView();
-        void ActionManager(Menu m, Command c);
+        void ShowPages(IModel m);
     }
 }

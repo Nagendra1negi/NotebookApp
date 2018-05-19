@@ -8,7 +8,7 @@ namespace NotebookApp
 {
     class ConsoleControler : IControler
     {
-        public void ReadCommand()
+        public void ReadCommand(IModel model)
         {
             Menus menu = new Menus();
             menu.ShowMenu();
@@ -23,8 +23,7 @@ namespace NotebookApp
                     Commands cOptions = new Commands();
                     cOptions.Show(mOption);
                 }
-                else
-                    ReadCommand();
+                ReadCommand(model);
             }
             else if (cmds.Length == 2)
             {
@@ -35,10 +34,10 @@ namespace NotebookApp
                     Command cOption = cOptions.ReadOption(cmds[1]);
                     if (cOptions.ValidOption(cOption))
                     {
-                        ActionManager(mOption, cOption);
+                        ActionManager(mOption, cOption, model);
                     }
                     else
-                        ReadCommand();
+                        ReadCommand(model);
 
                 }
             }
@@ -49,7 +48,7 @@ namespace NotebookApp
             throw new NotImplementedException();
         }
 
-        private void ActionManager(Menu m, Command c)
+        private void ActionManager(Menu m, Command c, IModel model)
         {
             switch(m)
             {
@@ -57,27 +56,63 @@ namespace NotebookApp
                     switch (c)
                     {
                         case Command.Message:
-                            Create(new Message());
+                            CreateAcquireData(new Message(), model);
                             break;
                         default:
                             Console.WriteLine("Invalid Operation!");
-                            ReadCommand();
+                            ReadCommand(model);
                             break;
                     }
                     break;
                 default:
                     Console.WriteLine("Invalid Operation!");
-                    ReadCommand();
+                    ReadCommand(model);
                     break;
             }
         }
 
         /* action to select wich IModel to use and create the data according to that selection*/
-        private void Create(IPageable page)
+        private void CreateAcquireData(IPageable page, IModel model)
         {
-            /*decide wich IModel */
-            page.Input();
+            /*acquire data */
+            PageData pd = new PageData();
+            Console.WriteLine("Author:");
+            pd.author = Console.ReadLine();
+            Console.WriteLine("Title:");
+            pd.title = Console.ReadLine();
+            page.Page = pd;
+            if(page is Message messagePage)
+            {
+                Console.WriteLine("What is your message to the world?");
+                messagePage.InputMessage(Console.ReadLine());
+                Create(page, model);
+                
+            }
 
+        }
+
+        /*select in wich mode should we save the data */
+        private void Create(IPageable page, IModel model)
+        {
+            /* user choosed temp mode */
+            if (model is TempModel tmodel)
+            {
+                model.Create(page);
+                Console.WriteLine("Page successfuly created!");
+                ShowPages(model);
+            }
+        }
+
+        public void ShowPages(IModel model)
+        {
+            /* user choosed temp mode */
+            if (model is TempModel tmodel)
+            {
+                foreach(IPageable page in model.ReadAll())
+                {
+                    Console.WriteLine($"Pages:\nId:{page.Page.id}, {page.Page.title} done by {page.Page.author}.");
+                }
+            }
         }
     }
 }

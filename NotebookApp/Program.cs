@@ -12,7 +12,13 @@ namespace NotebookApp
         {
             Welcome();
             ConsoleControler cc = new ConsoleControler();
-            cc.ReadCommand();
+            /*depended on the save mode choosen by the user*/
+            IModel dataModel = null;
+            if (true)
+            {
+                dataModel = new TempModel();
+            }
+            cc.ReadCommand(dataModel);
 
 
         }
