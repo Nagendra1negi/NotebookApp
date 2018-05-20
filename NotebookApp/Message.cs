@@ -12,6 +12,19 @@ namespace NotebookApp
         private PageData _pd;
         private string _message;
 
+        public Message()
+        {
+
+        }
+
+        public Message(int id, string author, string title, string message)
+        {
+            _message = message;
+            _pd.id = id;
+            _pd.author = author;
+            _pd.title = title;
+        }
+
         public PageData Page { get => _pd; set => _pd = value; }
         public string GetMessage { get => _message; }
 

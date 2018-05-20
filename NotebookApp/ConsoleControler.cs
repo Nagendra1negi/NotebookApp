@@ -101,13 +101,9 @@ namespace NotebookApp
 
         public void ShowPages(IModel model)
         {
-            /* user choosed temp mode */
-            if (model is TempModel tmodel)
+            foreach(IPageable page in model.ReadAll())
             {
-                foreach(IPageable page in model.ReadAll())
-                {
-                    Console.WriteLine($"Pages:\nId:{page.Page.id}, {page.Page.title} done by {page.Page.author}.");
-                }
+                Console.WriteLine($"Pages:\nId:{page.Page.id}, {page.Page.title} done by {page.Page.author}.");
             }
         }
 
