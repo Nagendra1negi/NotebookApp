@@ -1,4 +1,4 @@
-﻿#define PRINTSQL
+﻿//#define PRINTSQL
 
 using System;
 using System.Collections.Generic;
@@ -24,59 +24,74 @@ namespace NotebookApp
 
         public void Create(IPageable page)
         {
-            using (SqlConnection con = new SqlConnection(
+            using (SqlConnection connection = new SqlConnection(
         connectionString))
             {
                 int pageId;
-                con.Open();
+                connection.Open();
+                SqlCommand command = connection.CreateCommand();
+                SqlTransaction transaction = connection.BeginTransaction();
+                command.Transaction = transaction;
+                command.Connection = connection;
                 try
                 {
-                    using (SqlCommand command = new SqlCommand(
-                        "INSERT INTO Page(Author, Title) VALUES(@Author, @Title); SELECT SCOPE_IDENTITY();", con))
+                    command.CommandText =
+                        "INSERT INTO Page(Author, Title) VALUES(@Author, @Title); SELECT SCOPE_IDENTITY();";
+
+
+                    command.Parameters.Add(new SqlParameter("Author", page.Page.author));
+                    command.Parameters.Add(new SqlParameter("Title", page.Page.title));
+#if (PRINTSQL)
+                    string tmp = command.CommandText.ToString();
+                    foreach (SqlParameter p in command.Parameters)
                     {
-                        command.Parameters.Add(new SqlParameter("Author", page.Page.author));
-                        command.Parameters.Add(new SqlParameter("Title", page.Page.title));
-#if(PRINTSQL)
-                        string tmp = command.CommandText.ToString();
-                        foreach (SqlParameter p in command.Parameters)
-                        {
-                            tmp = tmp.Replace('@' + p.ParameterName.ToString(), "'" + p.Value.ToString() + "'");
-                        }
-                        Console.WriteLine(tmp);
-#endif
-                        pageId = int.Parse(command.ExecuteScalar().ToString());
+                        tmp = tmp.Replace('@' + p.ParameterName.ToString(), "'" + p.Value.ToString() + "'");
                     }
+                    Console.WriteLine(tmp);
+#endif
+                    pageId = int.Parse(command.ExecuteScalar().ToString());
+
 
                     if (page is Message pMessage)
                     {
-                        using (SqlCommand command = new SqlCommand(
-                            "INSERT INTO Message(PageId, Message) VALUES(@PageId, @Message)", con))
-                        {
-                            command.Parameters.Add(new SqlParameter("PageId", pageId));
-                            command.Parameters.Add(new SqlParameter("Message", pMessage.GetMessage));
+                        command.CommandText =
+                            "INSERT INTO Message(PageId, Message) VALUES(@PageId, @Message)";
+                        command.Parameters.Add(new SqlParameter("PageId", pageId));
+                        command.Parameters.Add(new SqlParameter("Message", pMessage.GetMessage));
 #if (PRINTSQL)
-                            string tmp = command.CommandText.ToString();
-                            foreach (SqlParameter p in command.Parameters)
-                            {
-                                tmp = tmp.Replace('@' + p.ParameterName.ToString(), "'" + p.Value.ToString() + "'");
-                            }
-                            Console.WriteLine(tmp);
-#endif
-                            command.ExecuteNonQuery();
+                        string tmp1 = command.CommandText.ToString();
+                        foreach (SqlParameter p in command.Parameters)
+                        {
+                            tmp1 = tmp1.Replace('@' + p.ParameterName.ToString(), "'" + p.Value.ToString() + "'");
                         }
+                        Console.WriteLine(tmp1);
+#endif
+                        command.ExecuteNonQuery();
                     }
                 }
-                catch
+                catch (Exception e)
                 {
-                    Console.WriteLine("Could not insert.");
+                    Console.WriteLine("Could not insert.{0}", e.Message);
                 }
-                con.Close();
+                transaction.Commit();
+                connection.Close();
             }
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            using (SqlConnection con = new SqlConnection(
+            connectionString))
+            {
+                con.Open();
+                string query = "DELETE" +
+                    " FROM Message " +
+                    " where PageId = " + id
+                    ;
+                SqlCommand command = new SqlCommand(query, con);
+                command.ExecuteNonQuery();
+                con.Close();
+            }
         }
 
         public void Delete(IPageable page)
@@ -86,12 +101,48 @@ namespace NotebookApp
 
         public void DeleteAll()
         {
-            throw new NotImplementedException();
+            using (SqlConnection con = new SqlConnection(
+            connectionString))
+            {
+                con.Open();
+                string query = "DELETE" +
+                    " FROM Message "
+                    ;
+                SqlCommand command = new SqlCommand(query, con);
+                command.ExecuteNonQuery();
+                con.Close();
+            }
         }
 
         public IPageable Read(int id)
         {
-            throw new NotImplementedException();
+            string author = "";
+            string title = "";
+            string message = "";
+            using (SqlConnection con = new SqlConnection(
+            connectionString))
+            {
+                con.Open();
+                string query = "SELECT Page.Id, Page.Author, Page.Title, Message.Message" +
+                    " FROM Message " +
+                    " INNER JOIN Page" +
+                    " ON Page.Id = Message.PageId" +
+                    " WHERE Page.Id = " + id
+                    ;
+
+                using (SqlCommand command = new SqlCommand(query, con))
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        author = reader.GetString(1);
+                        title = reader.GetString(2);
+                        message = reader.GetString(3);
+                    }
+                }
+                con.Close();
+            }
+            return new Message(id, author, title, message);
         }
 
         public List<IPageable> ReadAll()

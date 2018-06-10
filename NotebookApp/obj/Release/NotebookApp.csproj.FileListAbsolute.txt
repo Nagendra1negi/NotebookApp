@@ -6,3 +6,4 @@ C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\bin\Release\NotebookApp.pdb
 C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\obj\Release\NotebookApp.csproj.CoreCompileInputs.cache
 C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\obj\Release\NotebookApp.exe
 C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\obj\Release\NotebookApp.pdb
+C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\obj\Release\NotebookApp.csprojResolveAssemblyReference.cache

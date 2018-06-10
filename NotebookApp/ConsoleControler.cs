@@ -25,8 +25,20 @@ namespace NotebookApp
                 }
                 ReadCommand(model);
             }
-            else if (cmds.Length == 2)
+            else if (cmds.Length == 2 || cmds.Length == 3)
             {
+                int inputedId = 0;
+                bool all = false;
+                if (cmds.Length == 3 && (int.TryParse(cmds[2], out inputedId) == false && cmds[2].ToUpper() != "ALL"))
+                {
+                    Console.WriteLine("Invalid Operation!");
+                    ReadCommand(model);
+                }
+                else if (cmds.Length == 3)
+                {
+                    all = cmds[2].ToUpper() == "ALL";
+                }
+
                 Menu mOption = menu.ReadOption(cmds[0]);
                 if (menu.ValidOption(mOption))
                 {
@@ -34,12 +46,20 @@ namespace NotebookApp
                     Command cOption = cOptions.ReadOption(cmds[1]);
                     if (cOptions.ValidOption(cOption))
                     {
-                        ActionManager(mOption, cOption, model);
+                        ActionManager(mOption, cOption, model, inputedId, all);
                     }
                     else
+                    {
+                        Console.WriteLine("Invalid Operation!");
                         ReadCommand(model);
+                    }
 
                 }
+            }
+            else
+            {
+                Console.WriteLine("Invalid Operation!");
+                ReadCommand(model);
             }
         }
 
@@ -48,15 +68,53 @@ namespace NotebookApp
             throw new NotImplementedException();
         }
 
-        private void ActionManager(Menu m, Command c, IModel model)
+        private void ActionManager(Menu m, Command c, IModel model, int id = 0, bool all = false)
         {
-            switch(m)
+            switch (m)
             {
                 case Menu.New:
                     switch (c)
                     {
                         case Command.Message:
                             CreateAcquireData(new Message(), model);
+                            break;
+                        default:
+                            Console.WriteLine("Invalid Operation!");
+                            ReadCommand(model);
+                            break;
+                    }
+                    break;
+                case Menu.Delete:
+                    switch (c)
+                    {
+                        case Command.Message:
+                            if (all)
+                            {
+                                DeleteAll(model);
+                            }
+                            else
+                            {
+                                Delete(id, model);
+                            }
+                            break;
+                        default:
+                            Console.WriteLine("Invalid Operation!");
+                            ReadCommand(model);
+                            break;
+                    }
+                    break;
+                case Menu.Show:
+                    switch (c)
+                    {
+                        case Command.Message:
+                            if (all)
+                            {
+                                ShowPages(model);
+                            }
+                            else
+                            {
+                                Show(id, model);
+                            }
                             break;
                         default:
                             Console.WriteLine("Invalid Operation!");
@@ -81,12 +139,12 @@ namespace NotebookApp
             Console.WriteLine("Title:");
             pd.title = Console.ReadLine();
             page.Page = pd;
-            if(page is Message messagePage)
+            if (page is Message messagePage)
             {
                 Console.WriteLine("What is your message to the world?");
                 messagePage.InputMessage(Console.ReadLine());
                 Create(page, model);
-                
+
             }
 
         }
@@ -99,12 +157,38 @@ namespace NotebookApp
             ShowPages(model);
         }
 
+        private void Delete(int id, IModel model)
+        {
+            model.Delete(id);
+            Console.WriteLine("Page {0} successfuly deleted!", id);
+            ShowPages(model);
+        }
+
+        private void DeleteAll(IModel model)
+        {
+            model.DeleteAll();
+            Console.WriteLine("All pages were deleted!");
+            ReadCommand(model);
+        }
+
+        private void Show(int id, IModel model)
+        {
+            IPageable page = model.Read(id);
+            Console.WriteLine($"Page:\nId:{page.Page.id}, {page.Page.title.Trim()} done by {page.Page.author.Trim()}");
+            if (page is Message msg)
+            {
+                Console.WriteLine($"{msg.GetMessage.Trim()}");
+            }
+            ReadCommand(model);
+        }
+
         public void ShowPages(IModel model)
         {
-            foreach(IPageable page in model.ReadAll())
+            foreach (IPageable page in model.ReadAll())
             {
-                Console.WriteLine($"Pages:\nId:{page.Page.id}, {page.Page.title} done by {page.Page.author}.");
+                Console.WriteLine($"Pages:\nId:{page.Page.id}, {page.Page.title.Trim()} done by {page.Page.author.Trim()}.");
             }
+            ReadCommand(model);
         }
 
         public IModel GetMode()
