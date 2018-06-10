@@ -5,3 +5,5 @@ C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\obj\Debug\NotebookApp.csproj
 C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\obj\Debug\NotebookApp.csproj.CoreCompileInputs.cache
 C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\obj\Debug\NotebookApp.exe
 C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\obj\Debug\NotebookApp.pdb
+C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\bin\Debug\Pages.mdf
+C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\bin\Debug\Pages_log.ldf
