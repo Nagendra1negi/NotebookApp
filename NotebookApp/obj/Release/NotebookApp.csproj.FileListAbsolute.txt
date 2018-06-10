@@ -1,0 +1,9 @@
+C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\bin\Release\Pages.mdf
+C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\bin\Release\Pages_log.ldf
+C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\bin\Release\NotebookApp.exe.config
+C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\bin\Release\NotebookApp.exe
+C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\bin\Release\NotebookApp.pdb
+C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\obj\Release\NotebookApp.csproj.CoreCompileInputs.cache
+C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\obj\Release\NotebookApp.exe
+C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\obj\Release\NotebookApp.pdb
+C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\obj\Release\NotebookApp.csprojResolveAssemblyReference.cache
