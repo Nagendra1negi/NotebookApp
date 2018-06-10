@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Page>
+    <Id>1</Id>
+    <Author>Ana Ramos</Author>
+    <Title>Sunday shoping list</Title>
+    <Message>Bananas, Salt</Message>
+  </Page>
+  <Page>
+    <Id>2</Id>
+    <Author>Ricardo Costa</Author>
+    <Title>Sunday shoping list</Title>
+    <Message>Articles in primotion</Message>
+  </Page>
+</Document>
