@@ -28,7 +28,7 @@ namespace NotebookApp
             else if (cmds.Length == 2 || cmds.Length == 3)
             {
                 int inputedId = 0;
-                bool all = false;
+                bool all = true;
                 if (cmds.Length == 3 && (int.TryParse(cmds[2], out inputedId) == false && cmds[2].ToUpper() != "ALL"))
                 {
                     Console.WriteLine("Invalid Operation!");

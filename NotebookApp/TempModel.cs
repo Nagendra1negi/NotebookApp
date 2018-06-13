@@ -20,22 +20,35 @@ namespace NotebookApp
 
         public void Delete(int id)
         {
-            pages.RemoveAt(id);
+            pages.RemoveAt(id-1);
         }
 
         public void Delete(IPageable page)
         {
-            pages.Remove(page);
+            if (pages.Any())
+            {
+                pages.Remove(page);
+            }
         }
 
         public void DeleteAll()
         {
-            pages.Clear();
+            if (pages.Any())
+            {
+                pages.Clear();
+            }
         }
 
         public IPageable Read(int id)
         {
-            return pages[id];
+            if (pages.Any())
+            {
+                return pages[id-1];
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public List<IPageable> ReadAll()
@@ -45,7 +58,8 @@ namespace NotebookApp
 
         private int NextId()
         {
-            if(pages.Any()) {
+            if (pages.Any())
+            {
                 return pages.Max(t => t.Page.id) + 1;
             }
             else
