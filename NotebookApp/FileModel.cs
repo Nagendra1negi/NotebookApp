@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace NotebookApp
 {
     class FileModel : IModel
     {
-        string _filePagesPath = @"../Files/Pages.txt";
-        string _fileIdPath = @"../Files/NextId.txt";
+        string _filePagesPath = @"../Files/Pages.xml";
+        string _fileIdPath = @"../Files/NextId.xml";
         string _filesDir = @"../Files";
         int _nextId = 1;
-        StreamWriter _sw;
 
         public FileModel()
         {
@@ -23,7 +22,15 @@ namespace NotebookApp
             }
             if (!File.Exists(_filePagesPath))
             {
-                File.Create(_filePagesPath);
+                XmlWriterSettings xmlWriterSettings = new XmlWriterSettings();
+                xmlWriterSettings.Indent = true;
+                xmlWriterSettings.NewLineOnAttributes = true;
+                using (XmlWriter xmlWriter = XmlWriter.Create(_filePagesPath, xmlWriterSettings))
+                {
+                    xmlWriter.WriteStartDocument();
+                    xmlWriter.WriteStartElement("Document");
+                    xmlWriter.WriteEndElement();
+                }
             }
             if (!File.Exists(_fileIdPath))
             {
@@ -39,28 +46,34 @@ namespace NotebookApp
                 sr.Close();
             }
         }
-
         public void Create(IPageable page)
         {
-            _sw = new StreamWriter(_filePagesPath, append: true);
-            _sw.WriteLine("<Page>");
-            _sw.WriteLine($"<Id>{_nextId}</Id>");
-            _sw.WriteLine($"<Author>{page.Page.author}</Author>");
-            _sw.WriteLine($"<Title>{page.Page.title}</Title>");
+            XDocument xdoc = XDocument.Load(_filePagesPath);
+            XElement pageElement =
+                new XElement("Page",
+                    new XElement("Id", _nextId),
+                    new XElement("Author", page.Page.author),
+                    new XElement("Title", page.Page.title)
+                );
             if (page is Message pm)
             {
-                _sw.WriteLine($"<Message>{pm.GetMessage}</Message>");
+                pageElement.Add(new XElement("Message", pm.GetMessage));
             }
-            _sw.WriteLine($"</Page>");
-            _sw.Flush();
-            _sw.Close();
+            xdoc.Element("Document").Add(
+                pageElement);
+            xdoc.Save(_filePagesPath);
             IncrementId();
-
         }
-
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            if (File.Exists(_filePagesPath))
+            {
+                XDocument xDoc = XDocument.Load(_filePagesPath);
+                IEnumerable<XElement> xElements = xDoc.Elements("Document").Elements("Page").Where(xEl => (int)xEl.Element("Id") == id);
+                xElements.Remove();
+                xDoc.Save(_filePagesPath);
+                DecrementId();
+            }
         }
 
         public void Delete(IPageable page)
@@ -70,22 +83,56 @@ namespace NotebookApp
 
         public void DeleteAll()
         {
-            throw new NotImplementedException();
+            if (File.Exists(_filePagesPath))
+            {
+                File.Delete(_fileIdPath);
+                File.Delete(_filePagesPath);
+            }
         }
 
         public IPageable Read(int id)
         {
-            throw new NotImplementedException();
+            if (!File.Exists(_filePagesPath))
+            {
+                return null;
+            }
+
+            XDocument xDoc = XDocument.Load(_filePagesPath);
+            XElement xElement = xDoc.Elements("Document").Elements("Page").Where(xEl => (int)xEl.Element("Id") == id).First();
+            return new Message(id, xElement.Element("Author").Value, xElement.Element("Title").Value, xElement.Element("Message").Value);
+
         }
 
         public List<IPageable> ReadAll()
         {
-            throw new NotImplementedException();
+            if (!File.Exists(_filePagesPath))
+            {
+                return null;
+            }
+            XDocument xDoc = XDocument.Load(_filePagesPath);
+            IEnumerable<XElement> xElements = xDoc.Elements("Document").Elements("Page");
+            List<IPageable> listPages = new List<IPageable>();
+            foreach (XElement xElement in xElements)
+            {
+                listPages.Add(new Message(int.Parse(xElement.Element("Id").Value), xElement.Element("Author").Value, xElement.Element("Title").Value, xElement.Element("Message").Value));
+            }
+            return listPages;
         }
-        
+
         private void IncrementId()
         {
             _nextId += 1;
+            using (StreamWriter sw = new StreamWriter(_fileIdPath))
+            {
+                sw.WriteLine(_nextId);
+                sw.Flush();
+                sw.Close();
+            }
+        }
+
+        private void DecrementId()
+        {
+            _nextId -= 1;
             using (StreamWriter sw = new StreamWriter(_fileIdPath))
             {
                 sw.WriteLine(_nextId);
