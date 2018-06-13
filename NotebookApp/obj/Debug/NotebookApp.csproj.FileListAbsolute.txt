@@ -6,3 +6,4 @@ C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\obj\Debug\NotebookApp.exe
 C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\obj\Debug\NotebookApp.pdb
 C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\bin\Debug\Pages.mdf
 C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\bin\Debug\Pages_log.ldf
+C:\Users\Ricardo\myProjects\NotebookApp\NotebookApp\obj\Debug\NotebookApp.csprojResolveAssemblyReference.cache
