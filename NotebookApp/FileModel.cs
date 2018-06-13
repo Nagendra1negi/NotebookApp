@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -68,7 +66,14 @@ namespace NotebookApp
         }
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            if (File.Exists(_filePagesPath))
+            {
+                XDocument xDoc = XDocument.Load(_filePagesPath);
+                IEnumerable<XElement> xElements = xDoc.Elements("Document").Elements("Page").Where(xEl => (int)xEl.Element("Id") == id);
+                xElements.Remove();
+                xDoc.Save(_filePagesPath);
+                DecrementId();
+            }
         }
 
         public void Delete(IPageable page)
@@ -78,23 +83,56 @@ namespace NotebookApp
 
         public void DeleteAll()
         {
-            File.Delete(_fileIdPath);
-            File.Delete(_filePagesPath);
+            if (File.Exists(_filePagesPath))
+            {
+                File.Delete(_fileIdPath);
+                File.Delete(_filePagesPath);
+            }
         }
 
         public IPageable Read(int id)
         {
-            throw new NotImplementedException();
+            if (!File.Exists(_filePagesPath))
+            {
+                return null;
+            }
+
+            XDocument xDoc = XDocument.Load(_filePagesPath);
+            XElement xElement = xDoc.Elements("Document").Elements("Page").Where(xEl => (int)xEl.Element("Id") == id).First();
+            return new Message(id, xElement.Element("Author").Value, xElement.Element("Title").Value, xElement.Element("Message").Value);
+
         }
 
         public List<IPageable> ReadAll()
         {
-            throw new NotImplementedException();
+            if (!File.Exists(_filePagesPath))
+            {
+                return null;
+            }
+            XDocument xDoc = XDocument.Load(_filePagesPath);
+            IEnumerable<XElement> xElements = xDoc.Elements("Document").Elements("Page");
+            List<IPageable> listPages = new List<IPageable>();
+            foreach (XElement xElement in xElements)
+            {
+                listPages.Add(new Message(int.Parse(xElement.Element("Id").Value), xElement.Element("Author").Value, xElement.Element("Title").Value, xElement.Element("Message").Value));
+            }
+            return listPages;
         }
 
         private void IncrementId()
         {
             _nextId += 1;
+            using (StreamWriter sw = new StreamWriter(_fileIdPath))
+            {
+                sw.WriteLine(_nextId);
+                sw.Flush();
+                sw.Close();
+            }
+        }
+
+        private void DecrementId()
+        {
+            _nextId -= 1;
             using (StreamWriter sw = new StreamWriter(_fileIdPath))
             {
                 sw.WriteLine(_nextId);
