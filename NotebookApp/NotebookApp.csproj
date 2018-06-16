@@ -62,11 +62,11 @@
     <Compile Include="DBModel.cs" />
     <Compile Include="FileModel.cs" />
     <Compile Include="IControler.cs" />
-    <Compile Include="Image.cs" />
+    <Compile Include="ImagePage.cs" />
     <Compile Include="IModel.cs" />
     <Compile Include="IPageable.cs" />
-    <Compile Include="List.cs" />
-    <Compile Include="Message.cs" />
+    <Compile Include="ListPage.cs" />
+    <Compile Include="MessagePage.cs" />
     <Compile Include="ConsoleControler.cs" />
     <Compile Include="PagesDataSet.Designer.cs">
       <AutoGen>True</AutoGen>

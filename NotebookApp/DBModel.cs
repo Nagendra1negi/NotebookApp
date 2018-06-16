@@ -52,7 +52,7 @@ namespace NotebookApp
                     pageId = int.Parse(command.ExecuteScalar().ToString());
 
 
-                    if (page is Message pMessage)
+                    if (page is MessagePage pMessage)
                     {
                         command.CommandText =
                             "INSERT INTO Message(PageId, Message) VALUES(@PageId, @Message)";
@@ -142,12 +142,12 @@ namespace NotebookApp
                 }
                 con.Close();
             }
-            return new Message(id, author, title, message);
+            return new MessagePage(id, author, title, message);
         }
 
         public List<IPageable> ReadAll()
         {
-            List<Message> mList = new List<Message>();
+            List<MessagePage> mList = new List<MessagePage>();
             List<IPageable> list = new List<IPageable>();
 
             using (SqlConnection con = new SqlConnection(
@@ -169,7 +169,7 @@ namespace NotebookApp
                         string author = reader.GetString(1);
                         string title = reader.GetString(2);
                         string message = reader.GetString(3);
-                        mList.Add(new Message(id, author, title, message));
+                        mList.Add(new MessagePage(id, author, title, message));
                     }
                 }
                 con.Close();

@@ -55,7 +55,7 @@ namespace NotebookApp
                     new XElement("Author", page.Page.author),
                     new XElement("Title", page.Page.title)
                 );
-            if (page is Message pm)
+            if (page is MessagePage pm)
             {
                 pageElement.Add(new XElement("Message", pm.GetMessage));
             }
@@ -99,7 +99,7 @@ namespace NotebookApp
 
             XDocument xDoc = XDocument.Load(_filePagesPath);
             XElement xElement = xDoc.Elements("Document").Elements("Page").Where(xEl => (int)xEl.Element("Id") == id).First();
-            return new Message(id, xElement.Element("Author").Value, xElement.Element("Title").Value, xElement.Element("Message").Value);
+            return new MessagePage(id, xElement.Element("Author").Value, xElement.Element("Title").Value, xElement.Element("Message").Value);
 
         }
 
@@ -114,7 +114,7 @@ namespace NotebookApp
             List<IPageable> listPages = new List<IPageable>();
             foreach (XElement xElement in xElements)
             {
-                listPages.Add(new Message(int.Parse(xElement.Element("Id").Value), xElement.Element("Author").Value, xElement.Element("Title").Value, xElement.Element("Message").Value));
+                listPages.Add(new MessagePage(int.Parse(xElement.Element("Id").Value), xElement.Element("Author").Value, xElement.Element("Title").Value, xElement.Element("Message").Value));
             }
             return listPages;
         }

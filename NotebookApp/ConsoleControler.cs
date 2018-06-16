@@ -76,7 +76,13 @@ namespace NotebookApp
                     switch (c)
                     {
                         case Command.Message:
-                            CreateAcquireData(new Message(), model);
+                            CreateAcquireData(new MessagePage(), model);
+                            break;
+                        case Command.List:
+                            CreateAcquireData(new ListPage(), model);
+                            break;
+                        case Command.Image:
+                            CreateAcquireData(new ImagePage(), model);
                             break;
                         default:
                             Console.WriteLine("Invalid Operation!");
@@ -139,7 +145,7 @@ namespace NotebookApp
             Console.WriteLine("Title:");
             pd.title = Console.ReadLine();
             page.Page = pd;
-            if (page is Message messagePage)
+            if (page is MessagePage messagePage)
             {
                 Console.WriteLine("What is your message to the world?");
                 messagePage.InputMessage(Console.ReadLine());
@@ -175,7 +181,7 @@ namespace NotebookApp
         {
             IPageable page = model.Read(id);
             Console.WriteLine($"Page:\nId:{page.Page.id}, {page.Page.title.Trim()} done by {page.Page.author.Trim()}");
-            if (page is Message msg)
+            if (page is MessagePage msg)
             {
                 Console.WriteLine($"{msg.GetMessage.Trim()}");
             }

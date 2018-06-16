@@ -14,8 +14,6 @@ namespace NotebookApp
 
     public interface IPageable
     {
-        void Input(IPageable p);
-        IPageable Output(int id);
         PageData Page { get; set; }
     }
 }

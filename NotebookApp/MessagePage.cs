@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 namespace NotebookApp
 {
 
-    class Message : IPageable
+    class MessagePage : IPageable
     {
         private PageData _pd;
         private string _message;
 
-        public Message()
+        public MessagePage()
         {
 
         }
 
-        public Message(int id, string author, string title, string message)
+        public MessagePage(int id, string author, string title, string message)
         {
             _message = message;
             _pd.id = id;
@@ -27,16 +27,6 @@ namespace NotebookApp
 
         public PageData Page { get => _pd; set => _pd = value; }
         public string GetMessage { get => _message; }
-
-        public void Input(IPageable p)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IPageable Output(int id)
-        {
-            throw new NotImplementedException();
-        }
 
         public void InputMessage(string m)
         {
